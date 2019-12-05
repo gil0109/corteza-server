@@ -19,10 +19,9 @@ ENV COMPOSE_STORAGE_PATH   /data/compose
 ENV MESSAGING_STORAGE_PATH /data/messaging
 ENV SYSTEM_STORAGE_PATH    /data/system
 
-VOLUME /data
-RUN chmod a+rwx -R /data && \
-    chmod a+rwx -R /bin
+RUN chmod a+rwx -R /bin
 
+VOLUME /data
 EXPOSE 8000
 ENTRYPOINT ["/bin/corteza-server"]
 CMD ["serve-api"]
