@@ -20,7 +20,9 @@ ENV MESSAGING_STORAGE_PATH /data/messaging
 ENV SYSTEM_STORAGE_PATH    /data/system
 
 VOLUME /data
+RUN chmod a+rwx -R /data && \
+    chmod a+rwx -R /bin
 
-EXPOSE 80
+EXPOSE 8000
 ENTRYPOINT ["/bin/corteza-server"]
 CMD ["serve-api"]
