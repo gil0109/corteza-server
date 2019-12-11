@@ -215,10 +215,17 @@ func (r *message) FindThreads(filter types.MessageFilter) (set types.MessageSet,
 					"id IN (SELECT DISTINCT reply_to FROM messaging_message WHERE rel_user = ?)",
 					filter.CurrentUserID),
 			},
-		})
+		}).
+		OrderBy("id DESC").
+		Limit(uint64(f.Limit))
 
 	// Prepare the actual message selector
 	query := r.query().Join("originals ON (original_id IN (id, reply_to))")
+
+	if f.Query != "" {
+		q := "%" + strings.ToLower(f.Query) + "%"
+		query = query.Where(squirrel.Like{"LOWER(m.message)": q})
+	}
 
 	// And create CTE
 	cte := squirrel.ConcatExpr("WITH originals AS (", originals, ") ", query)
